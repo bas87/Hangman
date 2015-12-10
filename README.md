@@ -16,3 +16,5 @@ This project is part of requirements for completion of Multi-platform Programmin
 
 **How to run?**
 - Simply type in the console *python game.py*
+
+![alt tag](https://raw.githubusercontent.com/bas87/Hangman/images/sc.png)

@@ -215,7 +215,8 @@ class GameFrame(wx.Frame):
         self.pnl.Bind(wx.EVT_CHAR, self.OnChar)
         self.OnGameReset()
 
-        self.Centre( wx.BOTH )
+        self.Centre(wx.BOTH)
+
 
     def OnGameNew(self, event):
         word = self.wr.Get()
@@ -223,11 +224,13 @@ class GameFrame(wx.Frame):
         self.SetStatusText("",0)
         self.pnl.StartGame(word)
 
+
     def OnGameEnd(self, event):
         self.UpdateAverages(0)
         self.in_progress = 0
         self.SetStatusText("",0)
         self.pnl.EndGame()
+
 
     def OnGameReset(self, event=None):
         self.played = 0
@@ -236,20 +239,26 @@ class GameFrame(wx.Frame):
         self.average = 0.0
         self.OnGameNew(None)
 
+
     def OnSelectDic(self, event):
         item = (event.GetId() - self.urloffset)*2
         print "Trying to load %s" % (self.urls[item+1])
         self.wr = WordReader(self.urls[item+1])
 
+
     def UpdateAverages(self, has_won):
         if has_won:
             self.won = self.won + 1
+
         self.played = self.played+1
         self.history.append(self.pnl.misses) # ugly
+
         total = 0.0
         for m in self.history:
             total = total + m
+
         self.average = float(total/len(self.history))
+
 
     def OnButton(self, event):
         btn = event.GetEventObject()

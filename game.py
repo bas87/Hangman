@@ -130,7 +130,7 @@ class GameFrame(wx.Frame):
 
         bSizer1.Add(self.wnd, 1, wx.EXPAND |wx.ALL, 6 )
 
-        gSizer1 = wx.GridSizer( 0, 8, 0, 0 )
+        gSizer1 = wx.GridSizer( 0, 9, 0, 0 )
 
         for i in range(ord('a'), ord('z')+1):
             m_button8 = wx.Button( self, 1006, chr(i), wx.DefaultPosition, wx.DefaultSize, 0 )
@@ -156,8 +156,8 @@ class GameFrame(wx.Frame):
         menubar.Append(menu, "Game")
         menu = wx.Menu()
         urls = [ u'Česky', 'dic/cs.txt',
-        		 u'Česky - Demo', 'dic/cs_demo.txt',
-        		 u'English', 'dic/en.txt']
+                 u'Česky - Demo', 'dic/cs_demo.txt',
+                 u'English', 'dic/en.txt']
         urlmenu = wx.Menu()
         for item in range(0,len(urls),2):
             menu.Append(1020+item/2, urls[item], urls[item+1])

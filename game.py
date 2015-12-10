@@ -32,7 +32,7 @@ class GamePanel(wx.Panel):
 
         
     def StartGame(self, word):
-    	# Init defaults values
+        # Init defaults values
         self.word = word
         self.guess = []
         self.tries = 0

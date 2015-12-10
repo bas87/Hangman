@@ -15,7 +15,7 @@ LOCALE_DIR = os.path.join(APP_DIR, 'i18n') # .mo files will then be located in A
 
 # Provide a list, and gettext
 DEFAULT_LANGUAGES = os.environ.get('LANG', '').split('.')
-DEFAULT_LANGUAGES += ['en_US']
+DEFAULT_LANGUAGES += ['cs_US']
 
 lc, encoding = locale.getdefaultlocale()
 if lc:
@@ -34,7 +34,7 @@ gettext.find(APP_NAME, mo_location)
 
 gettext.textdomain (APP_NAME)
 
-gettext.bind_textdomain_codeset(APP_NAME, "UTF-8")
+gettext.bind_textdomain_codeset(APP_NAME, 'UTF-8')
 
 
 language = gettext.translation(APP_NAME, mo_location, languages=languages, fallback=True)

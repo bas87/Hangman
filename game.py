@@ -277,6 +277,7 @@ class GameFrame(wx.Frame):
 
     def OnButton(self, event):
         btn = event.GetEventObject()
+        self.HandleKey(ord(btn.GetLabelText()));
 
 
     def OnChar(self, event):

@@ -157,65 +157,81 @@ class GameFrame(wx.Frame):
         self.wr = wr
         wx.Frame.__init__(self, parent, wx.ID_ANY, _(u'Hangman'), wx.DefaultPosition, (500,600))
 
+        # main sizer
+        self.SetSizeHintsSz(wx.DefaultSize, wx.DefaultSize)
+        v_sizer = wx.BoxSizer( wx.VERTICAL )
+
+        # Game Panel
         self.pnl = GamePanel(self, wx.ID_ANY)
+        v_sizer.Add(self.pnl, 1, wx.EXPAND | wx.ALL, 6 )
 
-        self.SetSizeHintsSz( wx.DefaultSize, wx.DefaultSize )
-        bSizer1 = wx.BoxSizer( wx.VERTICAL )
+        # Grid sizer for vitrual keyboard
+        g_sizer = wx.GridSizer(0, 8, 0, 0)
 
-
-        bSizer1.Add(self.pnl, 1, wx.EXPAND |wx.ALL, 6 )
-
-        gSizer1 = wx.GridSizer( 0, 8, 0, 0 )
-
+        # Set buttons to sizer
         for i in range(ord('a'), ord('z')+1):
-            m_button8 = wx.Button( self, 1006, chr(i), wx.DefaultPosition, wx.DefaultSize, 0 )
-            m_button8.SetMinSize( wx.Size( 50,50 ) )
+            button = wx.Button(self, 1006, chr(i), wx.DefaultPosition, wx.DefaultSize, 0)
+            button.SetMinSize(wx.Size( 50,50 ))
+            g_sizer.Add(button, 0, wx.ALL, 5 )
 
-            gSizer1.Add(m_button8, 0, wx.ALL, 5 )
+        v_sizer.Add(g_sizer, 1, wx.EXPAND, 5)
 
-        bSizer1.Add( gSizer1, 1, wx.EXPAND, 5 )
+        # Menu bar
+        menubar = wx.MenuBar()
 
-
+        # Game menu
         menu = wx.Menu()
-        menu.Append(1001, _('New'))
-        menu.Append(1002, _(u'End'))
+
+        new = wx.MenuItem(menu, 1001, '&New\tCtrl+N', _(u'New Game'))
+        menu.AppendItem(new)
+
+        end = wx.MenuItem(menu, 1002, '&End\tCtrl+E', _(u'End Game'))
+        menu.AppendItem(end)
+
         menu.AppendSeparator()
-        menu.Append(1003, _(u'Reset'))
+
+        reset = wx.MenuItem(menu, 1003, '&Reset\tCtrl+R', _(u'Reset Rame'))
+        menu.AppendItem(reset)
+
         menu.AppendSeparator()
 
         quit = wx.MenuItem(menu, 1005, '&Quit\tCtrl+Q', _(u'Quit the Application'))
         menu.AppendItem(quit)
 
-        #menu.Append(1005, "Exit")
-        menubar = wx.MenuBar()
-        menubar.Append(menu, "Game")
-        menu = wx.Menu()
-        urls = [ u'Česky', 'dic/cs.txt',
-        		 u'Česky - Demo', 'dic/cs_demo.txt',
-        		 u'English', 'dic/en.txt']
+        menubar.Append(menu, _(u'Game'))
+
+        # Dic menu
         urlmenu = wx.Menu()
-        for item in range(0,len(urls),2):
-            menu.Append(1020+item/2, urls[item], urls[item+1])
-        menubar.Append(menu, _(u'Dictionary'))
-        self.urls = urls
-        self.urloffset = 1020
+
+        self.dic_event_id_offset = 1020
+        self.dics = [ u'Česky', 'dic/cs.txt',
+                 u'Česky - Demo', 'dic/cs_demo.txt',
+                 u'English', 'dic/en.txt']
+
+        for item in range(0,len(self.dics),2):
+            urlmenu.Append(self.dic_event_id_offset+item/2, self.dics[item], self.dics[item+1])
+
+        menubar.Append(urlmenu, _(u'Dictionary'))
         self.SetMenuBar(menubar)
 
-        self.SetSizer( bSizer1 )
+        self.SetSizer(v_sizer)
         self.Layout()
 
-
+        # Two col status bar
         self.CreateStatusBar(2)
+
+        # Bind events
         self.Bind(wx.EVT_MENU, self.OnGameNew, id=1001)
         self.Bind(wx.EVT_MENU, self.OnGameEnd, id=1002)
         self.Bind(wx.EVT_MENU, self.OnGameReset, id=1003)
         self.Bind(wx.EVT_MENU, self.OnWindowClose, id=1005)
         self.Bind(wx.EVT_BUTTON, self.OnButton, id=1006)
-        self.Bind(wx.EVT_MENU, self.OnSelectDic, id=1020, id2=1020+len(urls)/2)
+        self.Bind(wx.EVT_MENU, self.OnSelectDic, id=1020, id2=1020+len(self.dics)/2)
         self.pnl.Bind(wx.EVT_CHAR, self.OnChar)
-        self.OnGameReset()
 
         self.Centre(wx.BOTH)
+
+        self.OnGameReset()
 
 
     def OnGameNew(self, event):
@@ -241,9 +257,8 @@ class GameFrame(wx.Frame):
 
 
     def OnSelectDic(self, event):
-        item = (event.GetId() - self.urloffset)*2
-        print "Trying to load %s" % (self.urls[item+1])
-        self.wr = WordReader(self.urls[item+1])
+        item = (event.GetId() - self.dic_event_id_offset)*2
+        self.wr = WordReader(self.dics[item+1])
 
 
     def UpdateAverages(self, has_won):
@@ -262,24 +277,25 @@ class GameFrame(wx.Frame):
 
     def OnButton(self, event):
         btn = event.GetEventObject()
-        print self.HandleKey(ord(btn.GetLabelText()));
 
-        #print btn.GetLabelText()
 
     def OnChar(self, event):
+    	# TODO: duplicate code
         if not self.in_progress:
-            #print "new"
             self.OnGameNew(None)
             return
+
         key = event.GetKeyCode();
         #print key
         if key >= ord('A') and key <= ord('Z'):
             key = key + ord('a') - ord('A')
         key = chr(key)
+
         if key < 'a' or key > 'z':
             event.Skip()
             return
         res = self.pnl.HandleKey(key)
+
         if res == 0:
             self.SetStatusText(self.pnl.message)
         elif res == 1:
@@ -296,6 +312,7 @@ class GameFrame(wx.Frame):
             percent = 0.0
         self.SetStatusText(_(u'p %d, w %d (%g %%), av %g') % (self.played,self.won, percent, self.average),1)
 
+
     def OnWindowClose(self, event):
         dlg = wx.MessageDialog(self, _(u'Do you want close this window?'), '', wx.YES_NO | wx.YES_DEFAULT | wx.CANCEL | wx.ICON_QUESTION)
         val = dlg.ShowModal()
@@ -306,6 +323,7 @@ class GameFrame(wx.Frame):
             dlg.Destroy()
 
     def HandleKey(self, key):
+
         if not self.in_progress:
             #print "new"
             self.OnGameNew(None)
@@ -316,10 +334,12 @@ class GameFrame(wx.Frame):
         if key >= ord('A') and key <= ord('Z'):
             key = key + ord('a') - ord('A')
         key = chr(key)
+
         if key < 'a' or key > 'z':
             #event.Skip()
             return
         res = self.pnl.HandleKey(key)
+
         if res == 0:
             self.SetStatusText(self.pnl.message)
         elif res == 1:
@@ -330,12 +350,12 @@ class GameFrame(wx.Frame):
             self.in_progress = 0
             self.UpdateAverages(1)
             self.SetStatusText("Congratulations!",0)
+
         if self.played:
             percent = (100.*self.won)/self.played
         else:
             percent = 0.0
         self.SetStatusText(_(u'p %d, w %d (%g %%), av %g') % (self.played,self.won, percent, self.average),1)
-
 
 
 class GameApp(wx.App):

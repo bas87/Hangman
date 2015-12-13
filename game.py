@@ -37,7 +37,12 @@ class GameWindow(wx.Window):
         self.guess = []
         self.tries = 0
         self.misses = 0
-        self.hint = u''.join(random.sample(word, int(len(word)*0.35)))
+        
+        _tmp_word = u''.join(set(word))
+        if len(_tmp_word) > 1:
+            self.hint = u''.join(random.sample(_tmp_word, int(len(_tmp_word)*0.4)))
+        else:
+        	self.hint = _tmp_word
 
         # Draw picture
         self.Draw()
@@ -52,7 +57,7 @@ class GameWindow(wx.Window):
     def HandleKey(self, key):
         self.message = ""
         if self.guess.count(key):
-            self.message = _(u'Already guessed %s') % (key,)
+            self.message = _(u'Already guessed: %s') % (key,)
             return 0
 
         self.guess.append(key)
@@ -90,7 +95,7 @@ class GameWindow(wx.Window):
 
         (x,y) = self.GetSizeTuple()
 
-        x1 = x-200
+        x1 = x-170
         y1 = 20
 
         for letter in self.word:
@@ -100,15 +105,15 @@ class GameWindow(wx.Window):
                 dc.DrawText('.', x1, y1)
             x1 = x1 + 10
 
-        x1 = x-200
-        dc.DrawText(_('tries %d misses %d') % (self.tries,self.misses),x1,50)
+        x1 = x-170
+        dc.DrawText(_(u'tries %d misses %d') % (self.tries,self.misses),x1,50)
 
         guesses = ''
         for letter in self.guess:
             guesses = guesses + letter
 
-        dc.DrawText(_('hint: ') + self.hint, x1, 70)
-        dc.DrawText(_('guessed:'), x1, 90)
+        dc.DrawText(_(u'hint: ') + self.hint, x1, 70)
+        dc.DrawText(_(u'guessed: '), x1, 90)
         dc.DrawText(guesses[:13], x1+80, 90)
         dc.DrawText(guesses[13:], x1+80, 110)
         dc.SetUserScale(x/1000.0, y/1000.0)
@@ -183,20 +188,20 @@ class GameFrame(wx.Frame):
         # Game menu
         menu = wx.Menu()
 
-        new = wx.MenuItem(menu, 1001, '&New\tCtrl+N', _(u'New Game'))
+        new = wx.MenuItem(menu, 1001, _(u'&New\tCtrl+N'), _(u'New Game'))
         menu.AppendItem(new)
 
-        end = wx.MenuItem(menu, 1002, '&End\tCtrl+E', _(u'End Game'))
+        end = wx.MenuItem(menu, 1002, _(u'&End\tCtrl+E'), _(u'End Game'))
         menu.AppendItem(end)
 
         menu.AppendSeparator()
 
-        reset = wx.MenuItem(menu, 1003, '&Reset\tCtrl+R', _(u'Reset Rame'))
+        reset = wx.MenuItem(menu, 1003, _(u'&Reset\tCtrl+R'), _(u'Reset Rame'))
         menu.AppendItem(reset)
 
         menu.AppendSeparator()
 
-        quit = wx.MenuItem(menu, 1004, '&Quit\tCtrl+Q', _(u'Quit the Application'))
+        quit = wx.MenuItem(menu, 1004, _(u'&Quit\tCtrl+Q'), _(u'Quit the Application'))
         menu.AppendItem(quit)
 
         menubar.Append(menu, _(u'Game'))
@@ -259,6 +264,7 @@ class GameFrame(wx.Frame):
     def OnSelectDic(self, event):
         item = (event.GetId() - 1020)*2
         self.wr = WordReader(self.dics[item+1])
+        self.OnGameNew(None)
 
 
     def UpdateAverages(self, has_won):
@@ -329,7 +335,7 @@ class GameFrame(wx.Frame):
             self.in_progress = 0
             self.UpdateAverages(1)
 
-            dlg = wx.MessageDialog(self, _(u'Congratulations!'), '', wx.OK| wx.ICON_INFORMATION)
+            dlg = wx.MessageDialog(self, _(u'Congratulations! You\'re alive!'), '', wx.OK | wx.ICON_INFORMATION)
             val = dlg.ShowModal()
             if val == wx.ID_OK:
                 self.OnGameNew(None)
@@ -338,7 +344,7 @@ class GameFrame(wx.Frame):
             percent = (100.*self.won)/self.played
         else:
             percent = 0.0
-        self.SetStatusText(_(u'p %d, w %d (%g %%), av %g') % (self.played,self.won, percent, self.average),1)
+        self.SetStatusText(_(u'played %d, won %d (%g %%)') % (self.played,self.won, round(percent)),1)
 
 
 class GameApp(wx.App):

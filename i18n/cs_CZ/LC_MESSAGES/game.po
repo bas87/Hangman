@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"POT-Creation-Date: 2015-12-10 21:37+0100\n"
-"PO-Revision-Date: 2015-12-13 10:49+0100\n"
+"POT-Creation-Date: 2015-12-13 12:57+0100\n"
+"PO-Revision-Date: 2015-12-13 12:57+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: cs_CZ\n"
@@ -12,65 +12,91 @@ msgstr ""
 "X-Generator: Poedit 1.8.4\n"
 "X-Poedit-Basepath: ../../..\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Poedit-KeywordsList: _\n"
 "X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-KeywordsList: _\n"
 "X-Poedit-SearchPath-0: .\n"
 
 #: game.py:55
 #, python-format
-msgid "Already guessed %s"
-msgstr "Již uhodnuto %s"
+msgid "Already guessed: %s"
+msgstr "Již jsi hádal: %s"
 
 #: game.py:104
 #, python-format
 msgid "tries %d misses %d"
-msgstr "pokusů %d špatně %d"
+msgstr "pokusy %d špatně %d"
 
 #: game.py:110
 msgid "hint: "
-msgstr "nápověda:"
+msgstr "nápověda: "
 
 #: game.py:111
-msgid "guessed:"
-msgstr "uhodnuto:"
+msgid "guessed: "
+msgstr "hádáno: "
 
 #: game.py:158
 msgid "Hangman"
 msgstr "Šibenice"
 
-#: game.py:180
-msgid "New"
-msgstr "Nová"
-
-#: game.py:181
-msgid "End"
-msgstr "Konec"
-
-#: game.py:183
-msgid "Reset"
-msgstr "Znovu"
+#: game.py:186
+msgid "&New\tCtrl+N"
+msgstr "&Nová\tCtrl+N"
 
 #: game.py:186
+msgid "New Game"
+msgstr "Nová hra"
+
+#: game.py:189
+msgid "&End\tCtrl+E"
+msgstr "&Konec\tCtrl+E"
+
+#: game.py:189
+msgid "End Game"
+msgstr "Konec hry"
+
+#: game.py:194
+msgid "&Reset\tCtrl+R"
+msgstr "&Znovu\tCtrl+R"
+
+#: game.py:194
+msgid "Reset Rame"
+msgstr "Spusti znovu"
+
+#: game.py:199
+msgid "&Quit\tCtrl+Q"
+msgstr "&Ukončit\tCtrl+Q"
+
+#: game.py:199
 msgid "Quit the Application"
 msgstr "Ukončit aplikaci"
 
-#: game.py:199
+#: game.py:202
+msgid "Game"
+msgstr "Hra"
+
+#: game.py:214
 msgid "Dictionary"
 msgstr "Slovník"
 
-#: game.py:278
-msgid "Too bad, you're dead!"
-msgstr "Hodně špatně, jsi mrtví!"
-
-#: game.py:283
-msgid "Congratulations!"
-msgstr "Gratulace!"
-
-#: game.py:288 game.py:328
-#, python-format
-msgid "p %d, w %d (%g %%), av %g"
-msgstr "o %d, v %d (%g %%), pr %g"
-
-#: game.py:291
+#: game.py:294
 msgid "Do you want close this window?"
-msgstr "Chcete zavřít okno?"
+msgstr "Chcete zavřít toto okno?"
+
+#: game.py:324
+msgid "Too bad, you're dead!"
+msgstr "Příliš špatně! Zemřel jsi!"
+
+#: game.py:333
+msgid "Congratulations! You're alive!"
+msgstr "Gratuluji! Žiješ!"
+
+#: game.py:342
+#, python-format
+msgid "played %d, won %d (%g %%)"
+msgstr "odehráno %d, vyhráno %d (%g %%)"
+
+#~ msgid "played %d, won %d (%g %%), avg. miss. %g"
+#~ msgstr "odehráno %d, vyhráno %d (%g %%), prům. mim. %g"
+
+#~ msgid "guessed:"
+#~ msgstr "hádáno:"

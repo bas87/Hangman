@@ -15,7 +15,7 @@ LOCALE_DIR = os.path.join(APP_DIR, 'i18n') # .mo files will then be located in A
 
 # Provide a list, and gettext
 DEFAULT_LANGUAGES = os.environ.get('LANG', '').split('.')
-DEFAULT_LANGUAGES += ['en_US']
+DEFAULT_LANGUAGES += ['cs_CZ']
 
 lc, encoding = locale.getdefaultlocale()
 if lc:

@@ -11,9 +11,9 @@ from dic import WordReader
 _ = i18n.language.gettext
 
 
-class GamePanel(wx.Panel):
+class GameWindow(wx.Window):
     def __init__(self, parent, id, pos=wx.DefaultPosition, size=wx.DefaultSize):
-        wx.Panel.__init__(self, parent, id, pos, size)
+        wx.Window.__init__(self, parent, id, pos, size)
         self.SetBackgroundColour(wx.NamedColour('white'))
 
         # Windows platform excaption
@@ -162,8 +162,8 @@ class GameFrame(wx.Frame):
         v_sizer = wx.BoxSizer( wx.VERTICAL )
 
         # Game Panel
-        self.pnl = GamePanel(self, wx.ID_ANY)
-        v_sizer.Add(self.pnl, 1, wx.EXPAND | wx.ALL, 6 )
+        self.wnd = GameWindow(self, wx.ID_ANY)
+        v_sizer.Add(self.wnd, 1, wx.EXPAND | wx.ALL, 6 )
 
         # Grid sizer for vitrual keyboard
         g_sizer = wx.GridSizer(0, 8, 0, 0)
@@ -226,7 +226,7 @@ class GameFrame(wx.Frame):
         self.Bind(wx.EVT_MENU, self.OnWindowClose, id=1004)
         self.Bind(wx.EVT_BUTTON, self.OnButton, id=1005)
         self.Bind(wx.EVT_MENU, self.OnSelectDic, id=1020, id2=1020+len(self.dics)/2)
-        self.pnl.Bind(wx.EVT_CHAR, self.OnChar)
+        self.wnd.Bind(wx.EVT_CHAR, self.OnChar)
 
         self.Centre(wx.BOTH)
 
@@ -237,14 +237,14 @@ class GameFrame(wx.Frame):
         word = self.wr.Get()
         self.in_progress = 1
         self.SetStatusText("",0)
-        self.pnl.StartGame(word)
+        self.wnd.StartGame(word)
 
 
     def OnGameEnd(self, event):
         self.UpdateAverages(0)
         self.in_progress = 0
         self.SetStatusText("",0)
-        self.pnl.EndGame()
+        self.wnd.EndGame()
 
 
     def OnGameReset(self, event=None):
@@ -265,7 +265,7 @@ class GameFrame(wx.Frame):
             self.won = self.won + 1
 
         self.played = self.played+1
-        self.history.append(self.pnl.misses) # ugly
+        self.history.append(self.wnd.misses) # ugly
 
         total = 0.0
         for m in self.history:
@@ -275,13 +275,13 @@ class GameFrame(wx.Frame):
 
 
     def OnButton(self, event):
-    	self.pnl.SetFocus()
+        self.wnd.SetFocus()
         btn = event.GetEventObject()
         self.HandleKey(ord(btn.GetLabelText()));
 
 
     def OnChar(self, event):
-    	self.pnl.SetFocus()
+    	self.wnd.SetFocus()
         key = event.GetKeyCode()
         def cb():
             event.Skip()
@@ -312,9 +312,9 @@ class GameFrame(wx.Frame):
                 skip()
             return
 
-        res = self.pnl.HandleKey(key)
+        res = self.wnd.HandleKey(key)
         if res == 0:
-            self.SetStatusText(self.pnl.message)
+            self.SetStatusText(self.wnd.message)
         elif res == 1:
             self.UpdateAverages(0)
             self.SetStatusText("Too bad, you're dead!",0)

@@ -8,7 +8,7 @@ import i18n
 from dic import WordReader
 
 # Globals
-_ = i18n.language.gettext
+def _(t): return i18n.language.gettext(t).decode('utf8')
 
 
 class GameWindow(wx.Window):
@@ -101,14 +101,14 @@ class GameWindow(wx.Window):
             x1 = x1 + 10
 
         x1 = x-200
-        dc.DrawText(_('tries %d misses %d').decode('utf8') % (self.tries,self.misses),x1,50)
+        dc.DrawText(_('tries %d misses %d') % (self.tries,self.misses),x1,50)
 
         guesses = ''
         for letter in self.guess:
             guesses = guesses + letter
 
-        dc.DrawText(_('hint: ').decode('utf8') + self.hint, x1, 70)
-        dc.DrawText(_('guessed:').decode('utf8'), x1, 90)
+        dc.DrawText(_('hint: ') + self.hint, x1, 70)
+        dc.DrawText(_('guessed:'), x1, 90)
         dc.DrawText(guesses[:13], x1+80, 90)
         dc.DrawText(guesses[13:], x1+80, 110)
         dc.SetUserScale(x/1000.0, y/1000.0)
@@ -281,7 +281,7 @@ class GameFrame(wx.Frame):
 
 
     def OnChar(self, event):
-    	self.wnd.SetFocus()
+        self.wnd.SetFocus()
         key = event.GetKeyCode()
         def cb():
             event.Skip()

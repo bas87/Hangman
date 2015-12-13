@@ -318,12 +318,21 @@ class GameFrame(wx.Frame):
             self.SetStatusText(self.wnd.message)
         elif res == 1:
             self.UpdateAverages(0)
-            self.SetStatusText("Too bad, you're dead!",0)
             self.in_progress = 0
+
+            dlg = wx.MessageDialog(self, _(u'Too bad, you\'re dead!'), '', wx.OK | wx.ICON_INFORMATION)
+            val = dlg.ShowModal()
+            if val == wx.ID_OK:
+                self.OnGameNew(None)
+
         elif res == 2:
             self.in_progress = 0
             self.UpdateAverages(1)
-            self.SetStatusText("Congratulations!",0)
+
+            dlg = wx.MessageDialog(self, _(u'Congratulations!'), '', wx.OK| wx.ICON_INFORMATION)
+            val = dlg.ShowModal()
+            if val == wx.ID_OK:
+                self.OnGameNew(None)
 
         if self.played:
             percent = (100.*self.won)/self.played

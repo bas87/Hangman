@@ -170,7 +170,7 @@ class GameFrame(wx.Frame):
 
         # Set buttons to sizer
         for i in range(ord('a'), ord('z')+1):
-            button = wx.Button(self, 1006, chr(i), wx.DefaultPosition, wx.DefaultSize, 0)
+            button = wx.Button(self, 1005, chr(i), wx.DefaultPosition, wx.DefaultSize, 0)
             button.SetMinSize(wx.Size( 50,50 ))
             g_sizer.Add(button, 0, wx.ALL, 5 )
 
@@ -195,7 +195,7 @@ class GameFrame(wx.Frame):
 
         menu.AppendSeparator()
 
-        quit = wx.MenuItem(menu, 1005, '&Quit\tCtrl+Q', _(u'Quit the Application'))
+        quit = wx.MenuItem(menu, 1004, '&Quit\tCtrl+Q', _(u'Quit the Application'))
         menu.AppendItem(quit)
 
         menubar.Append(menu, _(u'Game'))
@@ -203,13 +203,12 @@ class GameFrame(wx.Frame):
         # Dic menu
         urlmenu = wx.Menu()
 
-        self.dic_event_id_offset = 1020
         self.dics = [ u'Česky', 'dic/cs.txt',
                  u'Česky - Demo', 'dic/cs_demo.txt',
                  u'English', 'dic/en.txt']
 
         for item in range(0,len(self.dics),2):
-            urlmenu.Append(self.dic_event_id_offset+item/2, self.dics[item], self.dics[item+1])
+            urlmenu.Append(1020+item/2, self.dics[item], self.dics[item+1])
 
         menubar.Append(urlmenu, _(u'Dictionary'))
         self.SetMenuBar(menubar)
@@ -224,8 +223,8 @@ class GameFrame(wx.Frame):
         self.Bind(wx.EVT_MENU, self.OnGameNew, id=1001)
         self.Bind(wx.EVT_MENU, self.OnGameEnd, id=1002)
         self.Bind(wx.EVT_MENU, self.OnGameReset, id=1003)
-        self.Bind(wx.EVT_MENU, self.OnWindowClose, id=1005)
-        self.Bind(wx.EVT_BUTTON, self.OnButton, id=1006)
+        self.Bind(wx.EVT_MENU, self.OnWindowClose, id=1004)
+        self.Bind(wx.EVT_BUTTON, self.OnButton, id=1005)
         self.Bind(wx.EVT_MENU, self.OnSelectDic, id=1020, id2=1020+len(self.dics)/2)
         self.pnl.Bind(wx.EVT_CHAR, self.OnChar)
 
@@ -257,7 +256,7 @@ class GameFrame(wx.Frame):
 
 
     def OnSelectDic(self, event):
-        item = (event.GetId() - self.dic_event_id_offset)*2
+        item = (event.GetId() - 1020)*2
         self.wr = WordReader(self.dics[item+1])
 
 
@@ -281,37 +280,10 @@ class GameFrame(wx.Frame):
 
 
     def OnChar(self, event):
-    	# TODO: duplicate code
-        if not self.in_progress:
-            self.OnGameNew(None)
-            return
-
-        key = event.GetKeyCode();
-        #print key
-        if key >= ord('A') and key <= ord('Z'):
-            key = key + ord('a') - ord('A')
-        key = chr(key)
-
-        if key < 'a' or key > 'z':
+        key = event.GetKeyCode()
+        def cb():
             event.Skip()
-            return
-        res = self.pnl.HandleKey(key)
-
-        if res == 0:
-            self.SetStatusText(self.pnl.message)
-        elif res == 1:
-            self.UpdateAverages(0)
-            self.SetStatusText(_(u'Too bad, you\'re dead!'),0)
-            self.in_progress = 0
-        elif res == 2:
-            self.in_progress = 0
-            self.UpdateAverages(1)
-            self.SetStatusText(_(u'Congratulations!'),0)
-        if self.played:
-            percent = (100.*self.won)/self.played
-        else:
-            percent = 0.0
-        self.SetStatusText(_(u'p %d, w %d (%g %%), av %g') % (self.played,self.won, percent, self.average),1)
+        self.HandleKey(key, cb)
 
 
     def OnWindowClose(self, event):
@@ -323,24 +295,22 @@ class GameFrame(wx.Frame):
         elif val == wx.ID_CANCEL:
             dlg.Destroy()
 
-    def HandleKey(self, key):
+    def HandleKey(self, key, skip = None):
 
         if not self.in_progress:
-            #print "new"
             self.OnGameNew(None)
             return
-
-        #print key
 
         if key >= ord('A') and key <= ord('Z'):
             key = key + ord('a') - ord('A')
         key = chr(key)
 
         if key < 'a' or key > 'z':
-            #event.Skip()
+            if not None:
+                skip()
             return
-        res = self.pnl.HandleKey(key)
 
+        res = self.pnl.HandleKey(key)
         if res == 0:
             self.SetStatusText(self.pnl.message)
         elif res == 1:

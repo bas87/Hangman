@@ -22,7 +22,7 @@ class GamePanel(wx.Panel):
         else:
             self.font = wx.Font(10, wx.MODERN, wx.NORMAL, wx.NORMAL)
 
-        #self.SetFocus()
+        self.SetFocus()
         self.Bind(wx.EVT_PAINT, self.OnPaint)
         self.Bind(wx.EVT_SIZE, self.OnSize)
 
@@ -275,11 +275,13 @@ class GameFrame(wx.Frame):
 
 
     def OnButton(self, event):
+    	self.pnl.SetFocus()
         btn = event.GetEventObject()
         self.HandleKey(ord(btn.GetLabelText()));
 
 
     def OnChar(self, event):
+    	self.pnl.SetFocus()
         key = event.GetKeyCode()
         def cb():
             event.Skip()

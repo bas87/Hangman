@@ -156,6 +156,7 @@ class GameFrame(wx.Frame):
     def __init__(self, parent, wr):
         self.wr = wr
         wx.Frame.__init__(self, parent, wx.ID_ANY, _(u'Hangman'), wx.DefaultPosition, (500,600))
+        self.SetBackgroundColour(wx.NamedColour('white'))
 
         # main sizer
         self.SetSizeHintsSz(wx.DefaultSize, wx.DefaultSize)

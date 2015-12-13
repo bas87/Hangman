@@ -17,4 +17,9 @@ This project is part of requirements for completion of Multi-platform Programmin
 **How to run?**
 - Simply type in the console *python game.py*
 
+** Windows portable version**
+If you want to try Hangman on Windows wihout installing python and wypython, you can try use portable version.
+Simply unpack __windows_portable.zip and double click on game.exe. Maybe will be needed run it like administrator.
+ It was tested on windows 7 and 10.
+
 ![alt tag](https://raw.githubusercontent.com/bas87/Hangman/images/sc.png)
